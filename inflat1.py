@@ -3,7 +3,7 @@ import streamlit as st
 
 inflation = pd.read_excel('./inflation.xlsx')
 inflation_2000_2016 = inflation[inflation['Год']<=2016]
-inflation_2000_2016 = inflation_2000_2016[inflation_2000_2016['од']>=2000]
+inflation_2000_2016 = inflation_2000_2016[inflation_2000_2016['Год']>=2000]
 inflation_2017_2024 = inflation[inflation['Год']>2016]
 
 xls = pd.ExcelFile('./Tab3_zpl_2024.xlsx')
