@@ -34,7 +34,6 @@ x2 = st.selectbox('Сопоставьте совмещаемые сектора 
 zp_2017_2024 = zp_2017_2024.rename({x2:x1})
 res1 = pd.concat([zp_2000_2016.loc[x1],zp_2017_2024.loc[x1]])
 res1.index.names=['Год']
-st.write('фактический и ожидаемый рост зарплаты относительно инфляции')
 calculate_zp_on_inf = [res1.iloc[0]]
 for i in inflation['Всего']:
     calculate_zp_on_inf.append(calculate_zp_on_inf[-1]*((100+i)/100))
@@ -44,12 +43,18 @@ zp_minus = res1['Зарплата'].copy()
 zp_minus_inf = res1['Зарплата по инфляции'].copy()
 for i in zp_minus.index[-1:0:-1]:
    zp_minus[i] = zp_minus[i]-zp_minus[i-1]
+   zp_minus_inf[i] = zp_minus_inf[i] - zp_minus_inf[i-1]
 zp_minus.loc[zp_minus.index[0]]=0
-st.dataframe(zp_minus)
+zp_minus_inf.loc[zp_minus_inf.index[0]]=0
+res2 = pd.DataFrame({'фактический прирост к зарплате':zp_minus,'ожидаемый прирост к зарплате по инфляции':zp_minus_inf})
+res2.index.names=['Год']
 st.dataframe(res1)
+st.dataframe(res2)
+st.write('фактический и ожидаемый рост зарплаты относительно инфляции')
 st.plotly_chart(px.scatter(data_frame=res1))
+st.plotly_chart(px.scatter(res2))
 st.write('График инфляции')
 st.plotly_chart(px.scatter(inflation['Всего']))
 st.write('Вывод 1: во всех секторах экономики произошел рост зарплат,в целом это указывает на равномерное развитие всех отраслей экономики')
 st.write('Вывод 2:если судить поверхностно-выглядит будто инфляция напрямую влияет на рост зарплат,однако на практике -не хватает данных при отрицательном росте инфляции(дефляции)')
-st.write('Вывод 3: ')
+st.write('Вывод 3: При сравнении фактического прироста к зарплате видно что при повышении инфляции фактический прирост падает ,однако в последующие годы нагоняет и обгоняет ожидаемый прирост ')
